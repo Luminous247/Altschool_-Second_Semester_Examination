@@ -14,7 +14,7 @@ Inside the project directory, i created a Vagrantfile with the following content
 # (VAGRANTFILE)
 Vagrant.configure("2") do |config|
 
-  # Configure Master Node
+   Configure Master Node
   config.vm.define "master" do |master|
     master.vm.box = "ubuntu/focal64"
     master.vm.network "private_network", ip: "192.168.56.101"
@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Configure Slave Node
+  Configure Slave Node
   config.vm.define "slave" do |slave|
     slave.vm.box = "ubuntu/focal64"
     slave.vm.network "private_network", ip: "192.168.33.12"
@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
   end
 
 end
-# Finally I vagrant up to start both virtual machines.
+Finally I vagrant up to start both virtual machines.
 
 
 #           STEP TWO (Created a Bash Script for LAMP  on Master Node)
@@ -46,7 +46,7 @@ find file in my resipitory
 I made the script executable: chmod +x setup-lamp.sh.
 
 #           STEP THREE (Provision Master VM with the Script)
-I Ran vagrant reload --provision or vagrant provision to apply the script to the Master VM.
+I Ran vagrant reload --provision to apply the script to the Master VM.
 
 #           STEP FOUR (I Wrote Ansible Playbook for Slave Node)
 I Installed Ansible on my PC(host Machine).
