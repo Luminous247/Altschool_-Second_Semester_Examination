@@ -1,7 +1,6 @@
 # Altschool_-Second_Semester_Examination
 # NAME : ABUBAKAR AYOMIDE MICHEAL 
 # Student ID: ALT/SOE/023/2451
-# Second Semester Project
 
 
 # Second Semester Exam
@@ -126,8 +125,8 @@ conf_mysql() {
    gold_echo "-------------Setup mysql database and user--------------------------------"
 
 # Configure MySQL database
-sudo mysql -uroot -e "CREATE DATABASE laravel_db;"
-sudo mysql -uroot -e "CREATE USER 'laravel_user'@'localhost' IDENTIFIED BY '000000';"
+sudo mysql -uroot -e "CREATE DATABASE Victor;"
+sudo mysql -uroot -e "CREATE USER 'Ayo'@'localhost' IDENTIFIED BY 'Joseph';"
 sudo mysql -uroot -e "GRANT ALL PRIVILEGES ON laravel_db.* TO 'laravel_user'@'localhost';"
 sudo mysql -uroot -e "FLUSH PRIVILEGES;"
 
@@ -141,9 +140,9 @@ gold_echo "------------------Editing .env file--------------------"
    sed -i 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' .env
    sed -i 's/# DB_HOST=127.0.0.1/DB_HOSTS=127.0.0.1/' .env
    sed -i 's/# DB_PORT=3306/DB_PORT=3306/' .env
-   sed -i 's/# DB_DATABASE=laravel/DB_DATABASE=laravel_db/' .env
-   sed -i 's/# DB_USERNAME=root/DB_USERNAME=laravel_user/' .env
-   sed -i 's/# DB_PASSWORD=/DB_PASSWORD=000000/' .env
+   sed -i 's/# DB_DATABASE=laravel/DB_DATABASE=Victor/' .env
+   sed -i 's/# DB_USERNAME=root/DB_USERNAME=Ayo/' .env
+   sed -i 's/# DB_PASSWORD=/DB_PASSWORD=Joseph/' .env
 
 
    gold_echo "--------------------Clearing Cache (php artisan cache)------------------"
@@ -201,52 +200,38 @@ main
 
 ### - Ansible playbook
 
-1. Copy script to slave node laravel_app.sh
+1. Copy script to slave node lamp.sh
 
 2. Setup Cron to Check Server Up-Time Every 12AM
 
 3. Check PHP Application Accessibility
 
-deploy_laravel.yml
+lamp.yml
+
 
 
 ---
-- name: Laravel Setup
-  hosts: web_server
+- name: deploy lamp stack
+  hosts: slave
+  become: true
   tasks:
-    - name: Copy Script to Ubuntu Local Server
-      copy:
-        src: laravel_app.sh
-        dest: ~/laravel_app.sh
-        mode: 0755
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /home/vagrant/lamp.sh
+        dest: /home/vagrant/lamp.sh
+        owner: root
+        group: root
+        mode: '0755'
 
-    - name: Setup Cron to Check Server Up-Time Every 12AM
+    - name: install lamp stack and laravel
+      script: /home/vagrant/lamp.sh
+
+    - name: Setup cron job for uptime
       cron:
-        name: "Execute Cron Every 12AM"
+        name: "Check uptime daily at midnight"
         minute: "0"
         hour: "0"
-        job: "uptime >> ~/uptime.log"
-
-    - name: Check Server Uptime
-      command: uptime -p
-      register: uptime_out
-
-    - name: Print Out Server Up-Time in Play
-      debug:
-        var: uptime_out.stdout
-
-    - name: Execute Laravel App Deployment Script
-      shell: ~/laravel_app.sh
-
-    - name: Check PHP Application Accessibility
-      command: curl http://192.168.56.7
-      register: php_app_response
-      ignore_errors: true
-
-    - name: Display Message if PHP Application is Accessible
-      debug:
-        msg: "PHP Application is Accessible"
-      when: php_app_response.rc == 0
+        job: "uptime >> /home/vagrant/server_uptime.log"
 
 
 
@@ -256,14 +241,10 @@ deploy_laravel.yml
 
 
 ## >> Play >>
-
-![Play](img/play.jpg)
+![alt text](image-2.png))
 
 ## Slave Node
-
-![Slave Node Files](img/slave_node.jpg)
+![alt text](image-1.png))
 
 ## Live View of Laravel App
-
-![Live view](img/laravel_page.jpg)
-
+![alt text](image.png))
