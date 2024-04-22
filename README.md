@@ -1,5 +1,5 @@
 # Altschool_-Second_Semester_Examination
-# NAME : ABUBAKAR AYOMIDE MICHEAAL 
+# NAME : ABUBAKAR AYOMIDE MICHEAL 
 # Student ID: ALT/SOE/023/2451
 # Second Semester Project
 
